@@ -1,7 +1,9 @@
 #include <stdio.h>          
 #include <stdlib.h>         
 #include <cuda_runtime.h>   
+#include <device_launch_parameters.h> // forgot to add earlier
 #include <math.h>
+#include <time.h>
 
 // Kernel for matrix multiplication on the GPU
 __global__ void matMulKernel(const float* M, const float* N, float* P, int width) {
@@ -18,6 +20,21 @@ __global__ void matMulKernel(const float* M, const float* N, float* P, int width
         }
         // Store the result
         P[row * width + col] = sum;
+    }
+}
+
+// Single-thread kernel
+__global__ void matMulKernelSingleThread(const float* M, const float* N, float* P, int width) {
+    if (threadIdx.x == 0 && blockIdx.x == 0 && threadIdx.y == 0 && blockIdx.y == 0) {
+        for (int row = 0; row < width; row++) {
+            for (int col = 0; col < width; col++) {
+                float sum = 0.0f;
+                for (int k = 0; k < width; k++) {
+                    sum += M[row * width + k] * N[k * width + col];
+                }
+                P[row * width + col] = sum;
+            }
+        }
     }
 }
 
@@ -39,7 +56,7 @@ void matMulCPU(const float* M, const float* N, float* P, int width) {
 // Comparison function to check correct answer
 bool compareArrays(const float* A, const float* B, int size, float tolerance) {
     for (int i = 0; i < size; i++) {
-        // If difference > tolerance, return false
+        // Reutrn Falseif difference > tolerance
         if (fabs(A[i] - B[i]) > tolerance) {
             return false;
         }
@@ -83,7 +100,7 @@ int main()
     const int numSizes1 = sizeof(sizes1) / sizeof(int);
 
     printf("--- Part 2.1: H to D and D to H Transfer Times ---\n");
-    printf("MatrixSizes: 256, 512, 1024, 2048, 4096\n\n");
+    printf("Matrix Sizes: 256, 512, 1024, 2048, 4096\n\n");
 
     // Arrays to store transfer times
     float hToDTimes[numSizes1];
@@ -154,7 +171,7 @@ int main()
         cudaEventDestroy(stopDtoH);
     }
 
-    // Print results for experiment (1)
+    // Print results for Part 2.1
     printf("Host to Device Transfer Times (ms) by Matrix Size:\n");
     for (int i = 0; i < numSizes1; i++) {
         printf("  Size %d x %d : %f ms\n", sizes1[i], sizes1[i], hToDTimes[i]);
@@ -169,15 +186,13 @@ int main()
     const int sizes2[] = {256, 512, 1024};
     const int numSizes2 = sizeof(sizes2) / sizeof(int);
 
-    // Code below was copied from the code snippet above:
-    // Thus refer to comments above for code below
     printf("--- Part 2.2 : CPU vs. GPU (Single Thread) ---\n");
     printf("MatrixSizes: 256, 512, 1024\n\n");
 
     for (int idx = 0; idx < numSizes2; idx++) {
         int width = sizes2[idx];
         size_t bytes = width * (size_t)width * sizeof(float);
-
+        
         float* hM = (float*)malloc(bytes);
         float* hN = (float*)malloc(bytes);
         float* hP = (float*)malloc(bytes);
@@ -206,7 +221,7 @@ int main()
         float hToD_ms = 0.0f;
         cudaEventElapsedTime(&hToD_ms, startHtoD, stopHtoD);
 
-        // Assign only 1 block with 1 thread
+        // Assign only 1 block with 1 thread as instructed
         dim3 block(1, 1);
         dim3 grid(1, 1);
 
@@ -216,7 +231,7 @@ int main()
 
         // GPU
         cudaEventRecord(startKernel);
-        matMulKernel<<<grid, block>>>(dM, dN, dP, width);
+        matMulKernelSingleThread<<<grid, block>>>(dM, dN, dP, width);
         cudaEventRecord(stopKernel);
         cudaEventSynchronize(stopKernel);
 
@@ -252,8 +267,8 @@ int main()
         printf("  CPU Time (ms)                    : %f\n", cpu_ms);
         printf("  GPU Time (1 block,1 thread) (ms) : %f (NO Transfer), %f (WITH Transfer)\n",
                 gpuTotalNoTransfer, gpuTotalWithTransfer);
-        printf("  => Transfer Times: H->D = %f ms, D->H = %f ms\n", hToD_ms, dToH_ms);
-        printf("  => %s\n\n", pass ? "Test PASSED" : "Test FAILED");
+        printf("    Transfer Times: H to D = %f ms, D to H = %f ms\n", hToD_ms, dToH_ms);
+        printf("    %s\n\n", pass ? "Test PASSED" : "Test FAILED");
 
         // Clean up
         cudaFree(dM);
