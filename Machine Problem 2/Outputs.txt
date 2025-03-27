@@ -1,0 +1,196 @@
+GPU Shared Memory (Tiled) Matrix Multiplication
+Measuring Kernel Time Only, Excluding Data Transfer.
+
+=============================================
+TILE_WIDTH = 2
+
+Matrix Size 256 x 256
+  Kernel Time  : 10.454272 ms
+  Result Check : Test PASSED
+
+Matrix Size 512 x 512
+  Kernel Time  : 86.620033 ms
+  Result Check : Test PASSED
+
+Matrix Size 1024 x 1024
+  Kernel Time  : 424.627258 ms
+  Result Check : Test PASSED
+
+Matrix Size 2048 x 2048
+  Kernel Time  : 2786.773926 ms
+  Result Check : Test PASSED
+
+Matrix Size 4096 x 4096
+  Kernel Time  : 21973.703125 ms
+  Result Check : Test PASSED
+
+=============================================
+TILE_WIDTH = 4
+
+Matrix Size 256 x 256
+  Kernel Time  : 8.702176 ms
+  Result Check : Test PASSED
+
+Matrix Size 512 x 512
+  Kernel Time  : 77.626556 ms
+  Result Check : Test PASSED
+
+Matrix Size 1024 x 1024
+  Kernel Time  : 266.674683 ms
+  Result Check : Test PASSED
+
+Matrix Size 2048 x 2048
+  Kernel Time  : 483.931885 ms
+  Result Check : Test PASSED
+
+Matrix Size 4096 x 4096
+  Kernel Time  : 3634.233887 ms
+  Result Check : Test PASSED
+
+=============================================
+TILE_WIDTH = 8
+
+Matrix Size 256 x 256
+  Kernel Time  : 3.049952 ms
+  Result Check : Test PASSED
+
+Matrix Size 512 x 512
+  Kernel Time  : 25.636127 ms
+  Result Check : Test PASSED
+
+Matrix Size 1024 x 1024
+  Kernel Time  : 168.719513 ms
+  Result Check : Test PASSED
+
+Matrix Size 2048 x 2048
+  Kernel Time  : 237.456100 ms
+  Result Check : Test PASSED
+
+Matrix Size 4096 x 4096
+  Kernel Time  : 1154.165894 ms
+  Result Check : Test PASSED
+
+=============================================
+TILE_WIDTH = 16
+
+Matrix Size 256 x 256
+  Kernel Time  : 13.100736 ms
+  Result Check : Test PASSED
+
+Matrix Size 512 x 512
+  Kernel Time  : 14.229152 ms
+  Result Check : Test PASSED
+
+Matrix Size 1024 x 1024
+  Kernel Time  : 112.679329 ms
+  Result Check : Test PASSED
+
+Matrix Size 2048 x 2048
+  Kernel Time  : 291.152954 ms
+  Result Check : Test PASSED
+
+Matrix Size 4096 x 4096
+  Kernel Time  : 955.233337 ms
+  Result Check : Test PASSED
+
+=============================================
+TILE_WIDTH = 32
+
+Matrix Size 256 x 256
+  Kernel Time  : 4.457824 ms
+  Result Check : Test PASSED
+
+Matrix Size 512 x 512
+  Kernel Time  : 13.922112 ms
+  Result Check : Test PASSED
+
+Matrix Size 1024 x 1024
+  Kernel Time  : 117.272736 ms
+  Result Check : Test PASSED
+
+Matrix Size 2048 x 2048
+  Kernel Time  : 297.096252 ms
+  Result Check : Test PASSED
+
+Matrix Size 4096 x 4096
+  Kernel Time  : 807.600342 ms
+  Result Check : Test PASSED
+
+
+
+Part 1 Questions:
+
+Device 0: NVIDIA T600
+Compute capability: 7.5
+Number of SMs: 10
+Max Threads per SM: 1024
+
+============================================
+TILE_WIDTH = 2
+BlockSize (threads) = 4
+Dynamic Shared Memory (bytes) = 32
+Occupancy Info:
+  Max active blocks per SM : 16
+  => Threads per SM        : 64
+  => Total Threads on GPU  : 640
+Kernel Resource Usage:
+  Registers per thread : 54
+  Static Shared Mem    : 0 bytes
+  Local Mem           : 0 bytes
+  Const Mem           : 0 bytes
+
+============================================
+TILE_WIDTH = 4
+BlockSize (threads) = 16
+Dynamic Shared Memory (bytes) = 128
+Occupancy Info:
+  Max active blocks per SM : 16
+  => Threads per SM        : 256
+  => Total Threads on GPU  : 2560
+Kernel Resource Usage:
+  Registers per thread : 54
+  Static Shared Mem    : 0 bytes
+  Local Mem           : 0 bytes
+  Const Mem           : 0 bytes
+
+============================================
+TILE_WIDTH = 8
+BlockSize (threads) = 64
+Dynamic Shared Memory (bytes) = 512
+Occupancy Info:
+  Max active blocks per SM : 16
+  => Threads per SM        : 1024
+  => Total Threads on GPU  : 10240
+Kernel Resource Usage:
+  Registers per thread : 54
+  Static Shared Mem    : 0 bytes
+  Local Mem           : 0 bytes
+  Const Mem           : 0 bytes
+
+============================================
+TILE_WIDTH = 16
+BlockSize (threads) = 256
+Dynamic Shared Memory (bytes) = 2048
+Occupancy Info:
+  Max active blocks per SM : 4
+  => Threads per SM        : 1024
+  => Total Threads on GPU  : 10240
+Kernel Resource Usage:
+  Registers per thread : 54
+  Static Shared Mem    : 0 bytes
+  Local Mem           : 0 bytes
+  Const Mem           : 0 bytes
+
+============================================
+TILE_WIDTH = 32
+BlockSize (threads) = 1024
+Dynamic Shared Memory (bytes) = 8192
+Occupancy Info:
+  Max active blocks per SM : 1
+  => Threads per SM        : 1024
+  => Total Threads on GPU  : 10240
+Kernel Resource Usage:
+  Registers per thread : 54
+  Static Shared Mem    : 0 bytes
+  Local Mem           : 0 bytes
+  Const Mem           : 0 bytes
