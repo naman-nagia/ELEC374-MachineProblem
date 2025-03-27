@@ -1,0 +1,91 @@
+Part 1:
+Device 0: NVIDIA T600
+Compute Capability: 7.5
+Clock Rate: 1335.00 MHz
+Number of Streaming Multiprocessors (SMs): 10
+Total CUDA Cores (approx.): 640
+Warp Size: 32
+Global Memory: 4.00 GB
+Constant Memory: 64.00 KB
+Shared Memory per Block: 48.00 KB
+Registers per Block: 65536
+Max Threads per Block: 1024
+Max Block Dimensions: (1024, 1024, 64)
+Max Grid Dimensions: (2147483647, 65535, 65535)
+
+Part 2:
+--- Part 2.1: H to D and D to H Transfer Times ---
+MatrixSizes: 256, 512, 1024, 2048, 4096
+
+Host to Device Transfer Times (ms) by Matrix Size:
+  Size 256 x 256 : 0.173728 ms
+  Size 512 x 512 : 0.514912 ms
+  Size 1024 x 1024 : 1.522336 ms
+  Size 2048 x 2048 : 5.598752 ms
+  Size 4096 x 4096 : 21.819136 ms
+
+Device to Host Transfer Times (ms) by Matrix Size:
+  Size 256 x 256 : 0.191232 ms
+  Size 512 x 512 : 0.601984 ms
+  Size 1024 x 1024 : 1.534912 ms
+  Size 2048 x 2048 : 5.465600 ms
+  Size 4096 x 4096 : 21.367456 ms
+
+--- Part 2.2 : CPU vs. GPU (Single Thread) ---
+MatrixSizes: 256, 512, 1024
+
+Matrix Size 256 x 256
+  CPU Time (ms)                    : 35.000000
+  GPU Time (1 block,1 thread) (ms) : 8532.343750 (NO Transfer), 8532.598633 (WITH Transfer)
+    Transfer Times: H to D = 0.156704 ms, D to H = 0.098944 ms
+    Test PASSED
+
+Matrix Size 512 x 512
+  CPU Time (ms)                    : 475.000000
+  GPU Time (1 block,1 thread) (ms) : 78453.343750 (NO Transfer), 78454.273438 (WITH Transfer)
+    Transfer Times: H to D = 0.550944 ms, D to H = 0.372160 ms
+    Test PASSED
+
+Matrix Size 1024 x 1024
+  CPU Time (ms)                    : 3718.000000
+  GPU Time (1 block,1 thread) (ms) : 656019.062500 (NO Transfer), 656022.812500 (WITH Transfer)
+    Transfer Times: H to D = 1.570624 ms, D to H = 2.213408 ms
+    Test PASSED
+
+--- Part 3.3: Kernel Times with varying Matrix Size & Block Width---
+MatrixSizes: 256, 512, 1024, 2048, 4096  |  BlockWidth: 2,4,8,16,32
+
+BlockWidth = 2
+  Size 256 x 256 -> Kernel Time = 164.616379 ms
+  Size 512 x 512 -> Kernel Time = 353.023529 ms
+  Size 1024 x 1024 -> Kernel Time = 1286.574219 ms
+  Size 2048 x 2048 -> Kernel Time = 10793.482422 ms
+  Size 4096 x 4096 -> Kernel Time = 89778.617188 ms
+
+BlockWidth = 4
+  Size 256 x 256 -> Kernel Time = 4.584320 ms
+  Size 512 x 512 -> Kernel Time = 38.927265 ms
+  Size 1024 x 1024 -> Kernel Time = 366.748840 ms
+  Size 2048 x 2048 -> Kernel Time = 2919.217529 ms
+  Size 4096 x 4096 -> Kernel Time = 23755.808594 ms
+
+BlockWidth = 8
+  Size 256 x 256 -> Kernel Time = 1.670912 ms
+  Size 512 x 512 -> Kernel Time = 12.938912 ms
+  Size 1024 x 1024 -> Kernel Time = 87.001022 ms
+  Size 2048 x 2048 -> Kernel Time = 791.867615 ms
+  Size 4096 x 4096 -> Kernel Time = 6442.567871 ms
+
+BlockWidth = 16
+  Size 256 x 256 -> Kernel Time = 1.344320 ms
+  Size 512 x 512 -> Kernel Time = 11.579136 ms
+  Size 1024 x 1024 -> Kernel Time = 104.591614 ms
+  Size 2048 x 2048 -> Kernel Time = 788.934998 ms
+  Size 4096 x 4096 -> Kernel Time = 6290.804688 ms
+
+BlockWidth = 32
+  Size 256 x 256 -> Kernel Time = 1.751808 ms
+  Size 512 x 512 -> Kernel Time = 13.951296 ms
+  Size 1024 x 1024 -> Kernel Time = 89.537376 ms
+  Size 2048 x 2048 -> Kernel Time = 760.267029 ms
+  Size 4096 x 4096 -> Kernel Time = 6298.536133 ms
