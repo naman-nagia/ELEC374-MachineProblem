@@ -1,3 +1,6 @@
+// Written by: Naman Nagia 
+// Student #: 20357592 
+//Main Source: https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__OCCUPANCY.html
 #include <cstdio>
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
@@ -39,7 +42,7 @@ int main()
         int maxActiveBlocks = 0;
         cudaError_t occErr = cudaOccupancyMaxActiveBlocksPerMultiprocessor(
             &maxActiveBlocks,
-            matMulTiled,  // Our kernel
+            matMulTiled,
             blockSize,
             sharedMemSize
         );
