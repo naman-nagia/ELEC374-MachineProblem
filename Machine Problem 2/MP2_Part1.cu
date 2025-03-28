@@ -25,10 +25,9 @@ __global__ void matMulTiled(const float* M, const float* N, float* P, int width,
     // Total tiles loaded
     int numPhases = (width + TILE_WIDTH - 1) / TILE_WIDTH;
 
-    for (int phase = 0; phase < numPhases; phase++)
-    {
-        int tiledCol = phase * TILE_WIDTH + threadIdx.x; // column index in M
-        int tiledRow = phase * TILE_WIDTH + threadIdx.y; // row index in N
+    for (int phase = 0; phase < numPhases; phase++){
+        int tiledCol = phase * TILE_WIDTH + threadIdx.x;
+        int tiledRow = phase * TILE_WIDTH + threadIdx.y;
 
         if (row < width && tiledCol < width)
             tileM[threadIdx.y * TILE_WIDTH + threadIdx.x] = M[row * width + tiledCol];
@@ -43,18 +42,15 @@ __global__ void matMulTiled(const float* M, const float* N, float* P, int width,
         // Synchronize to avoid race conditions
         __syncthreads();
 
-        for (int k = 0; k < TILE_WIDTH; k++)
-        {
-            val += tileM[threadIdx.y * TILE_WIDTH + k] *
-                   tileN[k * TILE_WIDTH + threadIdx.x];
+        for (int k = 0; k < TILE_WIDTH; k++){
+            val += tileM[threadIdx.y * TILE_WIDTH + k] * tileN[k * TILE_WIDTH + threadIdx.x];
         }
 
         // Synchronize again to ensure all threads are done writing
         __syncthreads();
     }
 
-    if (row < width && col < width)
-    {
+    if (row < width && col < width){
         P[row * width + col] = val;
     }
 }
@@ -161,12 +157,15 @@ int main()
             // Compute CPU refernce
             matMulCPU(hM, hN, hRef, width);
 
-            // Compare results
             bool pass = compareArrays(hRef, hP, width * width, 1e-3f);
 
             printf("Matrix Size %d x %d\n", width, width);
             printf("  Kernel Time  : %f ms\n", kernelMs);
-            printf("  Result Check : %s\n\n", pass ? "Test PASSED" : "Test FAILED");
+            if (pass){
+                printf("  Result Check : Test PASSED\n\n");
+            } else{
+                printf("  Result Check : Test FAILED\n\n");
+            }
 
             cudaFree(dM);
             cudaFree(dN);
